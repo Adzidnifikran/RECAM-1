@@ -1,4 +1,3 @@
-// FooterComponent.jsx
 import React from "react";
 
 const FooterComponent = () => {
@@ -9,9 +8,6 @@ const FooterComponent = () => {
           <span>Copyright &copy; Your Website 2020</span>
         </div>
       </div>
-      <a className="scroll-to-top rounded" href="#page-top">
-        <i className="fas fa-angle-up"></i>
-    </a>
     </footer>
   );
 };
