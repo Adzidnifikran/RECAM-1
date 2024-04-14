@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-  const SidebarComponent = () => {
+const SidebarComponent = () => {
   return (
-  <header classname="header">
-    <div id="wrapper"/>
+    <header className="header">
+      <div id="wrapper" />
       {/* Sidebar */}
       <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
         {/* Sidebar - Brand */}
@@ -11,13 +11,13 @@ import { Link } from 'react-router-dom';
           <div className="sidebar-brand-icon rotate-n-15">
             <i className="fas fa-laugh-wink" />
           </div>
-          <div className="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+          <div className="sidebar-brand-text mx-3">recam</div>
         </a>
         {/* Divider */}
         <hr className="sidebar-divider my-0" />
         {/* Nav Item - Dashboard */}
         <li className="nav-item">
-        <Link className="nav-link" to="/">
+          <Link className="nav-link" to="/">
             <i className="fas fa-fw fa-tachometer-alt" />
             <span>Dashboard</span></Link>
         </li>
@@ -48,7 +48,7 @@ import { Link } from 'react-router-dom';
           <button className="rounded-circle border-0" id="sidebarToggle" />
         </div>
       </ul>
-      </header>
+    </header>
   );
 };
-  export default SidebarComponent;
+export default SidebarComponent;

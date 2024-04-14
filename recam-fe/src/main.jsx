@@ -8,6 +8,10 @@ import './assets/vendor/jquery/jquery.min.js';
 import './assets/vendor/bootstrap/js/bootstrap.bundle.min.js';
 import './assets/vendor/jquery-easing/jquery.easing.min.js';
 import './assets/js/sb-admin-2.min.js';
+import './assets/vendor/datatables/dataTables.bootstrap4.min.css'
+import './assets/vendor/jquery/jquery.js';
+import 'datatables.net-dt';
+import 'datatables.net-bs4';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -5,8 +5,9 @@ import HeaderComponent from './component/template/Header';
 import FooterComponent from './component/template/Footer';
 import SidebarComponent from './component/template/Sidebar';
 import Home from './component/recams/Home';
-import Kamera from './component/recams/Kamera';
 import AddCamera from './component/recams/AddCamera';
+import UpdateCamera from './component/recams/UpdateCamera';
+import ListKamera from './component/recams/ListKamera';
 
 function App() {
   return (
@@ -18,8 +19,9 @@ function App() {
           <div className="container-fluid">
             <Routes>
               <Route path='/' element={<Home />} />
-              <Route path='/list' element={<Kamera />} />
+              <Route path='/list' element={<ListKamera />} />
               <Route path='/add-camera' element={<AddCamera />} />
+              <Route path='/update-camera/:id' element={<UpdateCamera />} />
             </Routes>
           </div>
           <div className="container my-auto"/>
@@ -29,5 +31,4 @@ function App() {
     </BrowserRouter>
   );
 }
-
 export default App;
