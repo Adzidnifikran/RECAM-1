@@ -4,14 +4,13 @@ import { deleteCamera, listCamera } from '../../service/KameraService';
 import Swal from 'sweetalert';
 
 
-function ListKamera() {
+function ListTransaksi() {
   const [cameras, setCameras] = useState([]);
 
   useEffect(() => {
     listCamera()
       .then(response => {
         setCameras(response.data.data);
-        console.log("data", response.data.data);
       })
       .catch(error => {
         console.error(error);
@@ -52,7 +51,7 @@ function ListKamera() {
   return (
     <div className="container-fluid">
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
-        <Link to="/add-camera" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <Link to="/add-rent" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
           <i className="fas fa-plus fa-sm text-white-50"></i> Add Camera
         </Link>
       </div>
@@ -103,4 +102,4 @@ function ListKamera() {
   );
 }
 
-export default ListKamera;
+export default ListTransaksi;

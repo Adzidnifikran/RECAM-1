@@ -99,8 +99,12 @@ const AddCamera = () => {
                                 </div>
                                 <div className="col-md-6">
                                     <label className="form-label">Type</label>
-                                    <input type="text" className={`form-control ${typeValid ? 'is-valid' : 'is-invalid'}`} placeholder="Enter type" aria-label="Last name"
-                                        value={cam_type} onChange={handleTypeChange} />
+                                    <select className={`form-select ${typeValid ? 'is-valid' : 'is-invalid'}`} aria-label="Type" value={cam_type} onChange={handleTypeChange}>
+                                        <option value="">Select type</option>
+                                        <option value="DSLR">DSLR</option>
+                                        <option value="Mirrorless">Mirrorless</option>
+                                        <option value="Prosummer">Prosummer</option>
+                                    </select>
                                 </div>
                             </div>
                             <div className="row g-3 mb-3">

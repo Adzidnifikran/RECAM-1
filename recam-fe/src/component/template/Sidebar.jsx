@@ -36,10 +36,10 @@ const SidebarComponent = () => {
         </li>
         {/* Nav Item - Utilities Collapse Menu */}
         <li className="nav-item">
-          <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+        <Link className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" to="/listrental">
             <i className="fas fa-fw fa-wrench" />
             <span>Rental</span>
-          </a>
+          </Link>
         </li>
         {/* Divider */}
         <hr className="sidebar-divider d-none d-md-block" />

@@ -8,6 +8,8 @@ import Home from './component/recams/Home';
 import AddCamera from './component/recams/AddCamera';
 import UpdateCamera from './component/recams/UpdateCamera';
 import ListKamera from './component/recams/ListKamera';
+import ListTransaksi from './component/recams/ListTransaksi';
+import AddRent from './component/recams/AddRent';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/list' element={<ListKamera />} />
+              <Route path='/listrental' element={<ListTransaksi/>}/>
+              <Route path='/add-rent' element={<AddRent/>}/>
               <Route path='/add-camera' element={<AddCamera />} />
               <Route path='/update-camera/:id' element={<UpdateCamera />} />
             </Routes>
