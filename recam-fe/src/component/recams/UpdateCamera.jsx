@@ -123,11 +123,6 @@ const UpdateCamera = () => {
                                         {!priceValid && <div className="invalid-feedback">Price must be a valid number</div>}
                                     </div>
                                 </div>
-                                <div className="col">
-                                    <label className="form-label">Status</label>
-                                    <input type="text" className="form-control" placeholder="Enter status" aria-label="Last name"
-                                        name="cam_status" value={camera.cam_status} onChange={handleInputChange} />
-                                </div>
                             </div>
                             <button type="submit" className="btn btn-rounded btn-block my-4 white-text font-weight-bold waves-effect z-depth-0" style={{ backgroundColor: '#0059AB' }}>Submit</button>
                         </form>
