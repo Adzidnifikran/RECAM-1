@@ -10,7 +10,8 @@ function ListKamera() {
   useEffect(() => {
     listCamera()
       .then(response => {
-        setCameras(response.data.data);
+        const dataCamera = response.data.data;
+        setCameras(dataCamera.filter(cmr => cmr.cam_status !== 0));
         console.log("data", response.data.data);
       })
       .catch(error => {
@@ -27,7 +28,8 @@ function ListKamera() {
     })
       .then((willDelete) => {
         if (willDelete) {
-          deleteCamera(id)
+          const cameraToDelete = { cam_id: id };
+          deleteCamera(cameraToDelete)
             .then(() => {
               setCameras(cameras.filter(camera => camera.cam_id !== id));
               Swal("Poof! Your camera data has been deleted!", {

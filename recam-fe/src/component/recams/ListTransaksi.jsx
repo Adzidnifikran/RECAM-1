@@ -1,95 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { deleteCamera, listCamera } from '../../service/KameraService';
+import { listRent } from '../../service/RentService';
 import Swal from 'sweetalert';
 
 
 function ListTransaksi() {
-  const [cameras, setCameras] = useState([]);
+  const [trans, setTrans] = useState([]);
 
   useEffect(() => {
-    listCamera()
+    listRent()
       .then(response => {
-        setCameras(response.data.data);
+        setTrans(response.data.data);
       })
       .catch(error => {
         console.error(error);
       })
   }, []);
-  const handleDelete = (id) => {
-    Swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this camera data!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    })
-      .then((willDelete) => {
-        if (willDelete) {
-          deleteCamera(id)
-            .then(() => {
-              setCameras(cameras.filter(camera => camera.cam_id !== id));
-              Swal("Poof! Your camera data has been deleted!", {
-                icon: "success",
-              });
-            })
-            .catch(error => {
-              console.error("Error deleting camera:", error);
-              Swal({
-                title: "Error",
-                text: "Failed to delete camera. Please try again later.",
-                icon: "error",
-                button: "OK",
-              });
-            });
-        } else {
-          Swal("Your camera data is safe!");
-        }
-      });
-  };
+  
 
   return (
     <div className="container-fluid">
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
         <Link to="/add-rent" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-          <i className="fas fa-plus fa-sm text-white-50"></i> Add Camera
+          <i className="fas fa-plus fa-sm text-white-50"></i> Add Rent
         </Link>
       </div>
       <div className="card shadow mb-4">
         <div className="card-header py-3 bg-primary">
-          <h6 className="m-0 font-weight-bold text-white">Camera Data</h6>
+          <h6 className="m-0 font-weight-bold text-white">Rent Data</h6>
         </div>
         <div className="card-body">
           <div className="table-responsive">
             <table className="table table-bordered" id="myTable" width="100%" cellSpacing={0} >
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Price</th>
-                  <th>Status</th>
-                  <th></th>
-                  <th></th>
+                  <th>Rent ID</th>
+                  <th>Customer</th>
+                  <th>Rent Date</th>
+                  <th>Rent Return</th>
+                  <th>Time</th>
+                  <th>Total</th>
+                  <th>Charge</th>
+                  <th>Return</th>
                 </tr>
               </thead>
               <tbody>
                 {
-                  cameras.map(camera =>
-                    <tr key={camera.cam_id}>
-                      <td>{camera.cam_name}</td>
-                      <td>{camera.cam_type}</td>
-                      <td>{camera.cam_price}</td>
-                      <td>{camera.cam_status}</td>
-                      <td className="action-buttons">
-                        <Link to={`/update-camera/${camera.cam_id}`} className="btn btn-primary btn-circle">
-                          <i className="fas fa-edit" />
-                        </Link>
-                      </td>
-                      <td className="action-buttons">
-                        <button onClick={() => handleDelete(camera.cam_id)} className="btn btn-danger btn-circle">
-                          <i className="fas fa-trash" />
-                        </button>
-                      </td>
+                  trans.map(transaksi =>
+                    <tr key={transaksi}>
+                      <td>{transaksi.rntId}</td>
+                      <td>{transaksi.customer}</td>
+                      <td>{transaksi.rentDate}</td>
+                      <td>{transaksi.rentReturn}</td>
+                      <td>{transaksi.time}</td>
+                      <td>{transaksi.total}</td>
+                      <td>{transaksi.charge}</td>
                     </tr>
                   )
                 }
