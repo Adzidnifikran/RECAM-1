@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { listCamera, deleteCamera } from '../../service/KameraService';
+import { listCamera, deleteCamera, updateCamera } from '../../service/KameraService';
 import { addRent } from '../../service/RentService';
 import { addRentDetail } from '../../service/RentDetailService';
 import Swal from 'sweetalert';
@@ -165,8 +165,8 @@ const AddRent = () => {
           .then((responses) => {
 
             const deletePromises = cam_ids.map((cam_id) => {
-              const cameraToRent = { cam_id: cam_id };
-              return deleteCamera(cameraToRent);
+              const cameraToRent = { cam_id: cam_id, cam_status:2 };
+              return updateCamera(cameraToRent);
             });
 
             Promise.all(deletePromises)

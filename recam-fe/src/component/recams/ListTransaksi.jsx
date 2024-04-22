@@ -1,22 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { listRent } from '../../service/RentService';
+import { addRentDetail } from '../../service/RentDetailService';
+import { updateCamera } from '../../service/KameraService';
 import Swal from 'sweetalert';
 
-
-function ListTransaksi() {
+const ListTransaksi = () => {
   const [trans, setTrans] = useState([]);
 
   useEffect(() => {
     listRent()
-      .then(response => {
+      .then((response) => {
         setTrans(response.data.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
-      })
+      });
   }, []);
-  
+
+  const handleUpdateCameraStatus = (rnt_id, cam_id) => {
+    const newCameraStatus = { cam_status: 1 };
+    updateCamera(cam_id, newCameraStatus)
+      .then((response) => {
+        Swal.fire('Success', 'Camera status updated successfully', 'success');
+      })
+      .catch((error) => {
+        Swal.fire('Error', 'Error updating camera status', 'error');
+      });
+  };
 
   return (
     <div className="container-fluid">
@@ -42,22 +53,39 @@ function ListTransaksi() {
                   <th>Total</th>
                   <th>Charge</th>
                   <th>Return</th>
+                  <th>Camera Status</th>
                 </tr>
               </thead>
               <tbody>
-                {
-                  trans.map(transaksi =>
-                    <tr key={transaksi}>
-                      <td>{transaksi.rntId}</td>
-                      <td>{transaksi.customer}</td>
-                      <td>{transaksi.rentDate}</td>
-                      <td>{transaksi.rentReturn}</td>
-                      <td>{transaksi.time}</td>
-                      <td>{transaksi.total}</td>
-                      <td>{transaksi.charge}</td>
-                    </tr>
-                  )
-                }
+                {trans.map((transaksi) => (
+                  <tr key={transaksi.rnt_id}>
+                    <td>{transaksi.rnt_id}</td>
+                    <td>{transaksi.customer}</td>
+                    <td>{transaksi.rent_date}</td>
+                    <td>{transaksi.rent_return}</td>
+                    <td>{transaksi.time}</td>
+                    <td>{transaksi.total}</td>
+                    <td>{transaksi.charge}</td>
+                    <td>
+                      {transaksi.rent_details.map((rentDetail) => (
+                        <div key={rentDetail.rnt_detail_id}>
+                          <input
+                            type="checkbox"
+                            checked={rentDetail.cam_status === 1}
+                            onChange={() => handleUpdateCameraStatus(transaksi.rnt_id, rentDetail.cam_id)}
+                          />
+                        </div>
+                      ))}
+                    </td>
+                    <td>
+                      {transaksi.rent_details.map((rentDetail) => (
+                        <div key={rentDetail.rnt_detail_id}>
+                          {rentDetail.cam_status === 1 ? 'Active' : 'Inactive'}
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -65,6 +93,6 @@ function ListTransaksi() {
       </div>
     </div>
   );
-}
+};
 
 export default ListTransaksi;

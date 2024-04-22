@@ -45,7 +45,7 @@ const UpdateCamera = () => {
             return;
         }
 
-        updateCamera(camera, id)
+        updateCamera(camera)
             .then((response) => {
                 console.log("Camera updated successfully:", response);
                 swal("Success", "Camera updated successfully", "success"); // Display SweetAlert on success
