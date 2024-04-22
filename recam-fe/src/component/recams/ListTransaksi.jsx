@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import { listRent } from '../../service/RentService';
 import { addRentDetail } from '../../service/RentDetailService';
 import { updateCamera } from '../../service/KameraService';
+import { updateRent } from '../../service/RentService';
 import Swal from 'sweetalert';
+import { listRentDetailByRentId } from '../../service/RentDetailService';
 
 const ListTransaksi = () => {
   const [trans, setTrans] = useState([]);
+  const [rentIds, setRentIds] = useState([]);
 
   useEffect(() => {
     listRent()
@@ -18,6 +21,111 @@ const ListTransaksi = () => {
       });
   }, []);
 
+  const handleReturn = (id) => {
+    Swal({
+      title: "Are you sure?",
+      text: "Done bang!",
+      icon: "warning",
+      buttons: true,
+    })
+      .then((willReturn) => {
+        if (willReturn) {
+          listRentDetailByRentId(id)
+        .then((response) => {
+          const rentDetails = response.data.data;
+          // Collecting all camera IDs to update their status
+          const camerasToUpdate = rentDetails.map((detail) => ({
+            cam_id: detail.camId,
+            cam_status: 1,
+          }));
+          const rentsToUpdate = rentDetails.map((detail) => ({
+            rntId: detail.rntId,
+            rnt_status: 1,
+          }));
+
+
+          // Creating an array of promises to update each camera
+          const updatePromises = camerasToUpdate.map((camera) => {
+            return updateCamera(camera)
+              .catch((error) => {
+                // Handle errors if any update fails
+                console.error("Error updating camera status:", error);
+                throw error; // Propagate the error to the Promise.all catch block
+              });
+          });
+
+                    // Creating an array of promises to update each camera
+                    const updateRentStatus = rentsToUpdate.map((rent) => {
+                      return updateRent(rent)
+                        .catch((error) => {
+                          // Handle errors if any update fails
+                          console.error("Error updating camera status:", error);
+                          throw error; // Propagate the error to the Promise.all catch block
+                        });
+                    });
+
+
+          // Executing all update promises in parallel
+          Promise.all(updatePromises, updateRentStatus)
+            .then(() => {
+              // After updating camera statuses, you can proceed with other actions
+              // For example, you can show a success message and navigate to another page
+              Swal({
+                title: "Success",
+                text: "Rent and rent detail have been added successfully!",
+                icon: "success",
+                button: "OK",
+              }).then(() => {
+                // Navigate to another page after successful completion
+                // Make sure you have imported `navigate` from `react-router-dom`
+                // You might also want to add a redirect URL or link here
+                // navigate('/listrental');
+              });
+            })
+            .catch((error) => {
+              // Handle errors if any of the update promises fail
+              console.error("Error updating camera status:", error);
+              Swal("Error", "Failed to update camera status", "error");
+            });
+        })
+        .catch((error) => {
+          // Handle errors if the listRentDetailByRentId function fails
+          console.error("Error fetching rent details:", error);
+          Swal("Error", "Failed to fetch rent details", "error");
+        });
+          // const rentToReturn = { rnt_id: id };
+          // useEffect(() => {
+          //   listRentDetailByRentId(id)
+          //     .then((response) => {
+          //       setRentIds(response.data.data);
+          //     })
+          //     .catch((error) => {
+          //       console.error(error);
+          //     });
+          // }, []);
+
+          // rentIds.map((cam_id) => {
+          //   const cameraToUpdate = { cam_id: cam_id, cam_status:1 };
+          //   updateCamera(cameraToUpdate);
+          // });
+
+          //   Swal({
+          //     title: "Success",
+          //     text: "Rent and rent detail have been added successfully!",
+          //     icon: "success",
+          //     button: "OK",
+          //   }).then(() => {
+          //     navigate('/listrental');
+          //   });
+            
+        } else {
+          Swal("Your camera data is safe!");
+        }
+      });
+  };
+
+
+
   const handleUpdateCameraStatus = (rnt_id, cam_id) => {
     const newCameraStatus = { cam_status: 1 };
     updateCamera(cam_id, newCameraStatus)
@@ -28,6 +136,8 @@ const ListTransaksi = () => {
         Swal.fire('Error', 'Error updating camera status', 'error');
       });
   };
+
+
 
   return (
     <div className="container-fluid">
@@ -45,7 +155,6 @@ const ListTransaksi = () => {
             <table className="table table-bordered" id="myTable" width="100%" cellSpacing={0} >
               <thead>
                 <tr>
-                  <th>Rent ID</th>
                   <th>Customer</th>
                   <th>Rent Date</th>
                   <th>Rent Return</th>
@@ -53,37 +162,29 @@ const ListTransaksi = () => {
                   <th>Total</th>
                   <th>Charge</th>
                   <th>Return</th>
-                  <th>Camera Status</th>
                 </tr>
               </thead>
               <tbody>
                 {trans.map((transaksi) => (
-                  <tr key={transaksi.rnt_id}>
-                    <td>{transaksi.rnt_id}</td>
+                  <tr key={transaksi.rntId}>
                     <td>{transaksi.customer}</td>
-                    <td>{transaksi.rent_date}</td>
-                    <td>{transaksi.rent_return}</td>
+                    <td>{transaksi.rentDate}</td>
+                    <td>{transaksi.rentReturn}</td>
                     <td>{transaksi.time}</td>
                     <td>{transaksi.total}</td>
                     <td>{transaksi.charge}</td>
-                    <td>
-                      {transaksi.rent_details.map((rentDetail) => (
-                        <div key={rentDetail.rnt_detail_id}>
-                          <input
-                            type="checkbox"
-                            checked={rentDetail.cam_status === 1}
-                            onChange={() => handleUpdateCameraStatus(transaksi.rnt_id, rentDetail.cam_id)}
-                          />
-                        </div>
-                      ))}
-                    </td>
-                    <td>
-                      {transaksi.rent_details.map((rentDetail) => (
-                        <div key={rentDetail.rnt_detail_id}>
-                          {rentDetail.cam_status === 1 ? 'Active' : 'Inactive'}
-                        </div>
-                      ))}
-                    </td>
+<td className="action-buttons">
+{transaksi.rnt_status === 0 && (
+    <button onClick={() => handleReturn(transaksi.rntId)} className="btn btn-danger">
+      Done
+    </button>
+  )}
+  {transaksi.rnt_status === 1 && (
+    <button onClick={() => handleReturn(transaksi.rntId)} className="btn btn-secondary">
+      Finished
+    </button>
+  )}
+</td>
                   </tr>
                 ))}
               </tbody>
@@ -93,6 +194,6 @@ const ListTransaksi = () => {
       </div>
     </div>
   );
-};
+}
 
 export default ListTransaksi;
