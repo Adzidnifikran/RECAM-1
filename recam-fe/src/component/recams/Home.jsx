@@ -1,67 +1,89 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { listRent } from '../../service/RentService';
+import { PieChart, Pie, Tooltip, ResponsiveContainer } from 'recharts';
+import Revenue from './Revenue';
 
 function Home() {
+  const [totalDipinjam, setTotalDipinjam] = useState(0);
+  const [totalDikembalikan, setTotalDikembalikan] = useState(0);
+
+  useEffect(() => {
+    listRent()
+      .then(response => {
+        const transaksiData = response.data.data; // Mengambil data dari response
+
+        // Menghitung jumlah transaksi yang sedang dipinjam dan sudah dikembalikan
+        const jumlahDipinjam = transaksiData.filter(transaksi => transaksi.status = 2).length;
+        const jumlahDikembalikan = transaksiData.filter(transaksi => transaksi.status = 1).length;
+        
+        setTotalDipinjam(jumlahDipinjam);
+        setTotalDikembalikan(jumlahDikembalikan);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  const data = [
+    { name: 'Sedang Dirental', value: totalDipinjam },
+    { name: 'Sudah Dikembalikan', value: totalDikembalikan },
+  ];
+
   return (
-    <div><div className="container-fluid">
-      {/* Page Heading */}
-      <h1 className="h3 mb-2 text-gray-800">Charts</h1>
-      {/* Content Row */}
-      <div className="row">
-        <div className="col-xl-8 col-lg-7">
-          {/* Area Chart */}
-          <div className="card shadow mb-4">
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Area Chart</h6>
-            </div>
-            <div className="card-body">
-              <div className="chart-area">
-                <canvas id="myAreaChart" />
+    <section className="section dashboard">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-6">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">Statistika Rental</h5>
+                <hr />
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="alert alert-primary" role="alert">
+                      Sedang Dirental: {totalDipinjam}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="alert alert-success" role="alert">
+                      Sudah Dikembalikan: {totalDikembalikan}
+                    </div>
+                  </div>
+                </div>
+                <ResponsiveContainer width="90%" height={350}>
+                  <PieChart>
+                    <Pie
+                      dataKey="value"
+                      data={data}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={160}
+                      fill="#8884d8"
+                      label
+                    />
+                    <Pie
+                      dataKey="value"
+                      data={data}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={80}
+                      outerRadius={160}
+                      fill="#82ca9d"
+                    />
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-              <hr />
-              Styling for the area chart can be found in the
-              <code>/js/demo/chart-area-demo.js</code> file.
             </div>
           </div>
-          {/* Bar Chart */}
-          <div className="card shadow mb-4">
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Bar Chart</h6>
-            </div>
-            <div className="card-body">
-              <div className="chart-bar">
-                <canvas id="myBarChart" />
-              </div>
-              <hr />
-              Styling for the bar chart can be found in the
-              <code>/js/demo/chart-bar-demo.js</code> file.
-            </div>
-          </div>
-        </div>
-        {/* Donut Chart */}
-        <div className="col-xl-4 col-lg-5">
-          <div className="card shadow mb-4">
-            {/* Card Header - Dropdown */}
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-primary">Donut Chart</h6>
-            </div>
-            {/* Card Body */}
-            <div className="card-body">
-              <div className="chart-pie pt-4">
-                <canvas id="myPieChart" />
-              </div>
-              <hr />
-              Styling for the donut chart can be found in the
-              <code>/js/demo/chart-pie-demo.js</code> file.
-            </div>
+          {/* Render MostBorrowedBooks component here */}
+          <div className="col-lg-6">
+            <Revenue/>
           </div>
         </div>
       </div>
-    </div>
-      {/* /.container-fluid */}
-    </div>
-  )
+    </section>
+  );
 }
-export default Home
 
-
-
+export default Home;
