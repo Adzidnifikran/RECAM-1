@@ -33,13 +33,14 @@ const ListTransaksi = () => {
           listRentDetailByRentId(id)
         .then((response) => {
           const rentDetails = response.data.data;
+          console.log(rentDetails)
           // Collecting all camera IDs to update their status
           const camerasToUpdate = rentDetails.map((detail) => ({
             cam_id: detail.camId,
             cam_status: 1,
           }));
           const rentsToUpdate = rentDetails.map((detail) => ({
-            rntId: detail.rntId,
+            rnt_id: detail.rntId,
             rnt_status: 1,
           }));
 

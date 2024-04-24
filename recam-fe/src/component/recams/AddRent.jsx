@@ -151,6 +151,16 @@ const AddRent = () => {
       rnt_created_date
     };
 
+    if (rent.rnt_rent_date >= rent.rnt_rent_return) {
+      Swal({
+          title: "Error",
+          text: "Rent return date must be greater than rent date.",
+          icon: "error",
+          button: "OK",
+      });
+      return; // Menghentikan eksekusi jika validasi gagal
+  }
+
     addRent(rent)
       .then((response) => {
         const rentId = response.data.data.rnt_id; // assume the API returns the created rent ID
