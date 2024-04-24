@@ -13,7 +13,7 @@ function Home() {
         const transaksiData = response.data.data; // Mengambil data dari response
 
         // Menghitung jumlah transaksi yang sedang dipinjam dan sudah dikembalikan
-        const jumlahDipinjam = transaksiData.filter(transaksi => transaksi.status = 2).length;
+        const jumlahDipinjam = transaksiData.filter(transaksi => transaksi.status = 0).length;
         const jumlahDikembalikan = transaksiData.filter(transaksi => transaksi.status = 1).length;
         
         setTotalDipinjam(jumlahDipinjam);
