@@ -9,7 +9,7 @@ const SidebarComponent = () => {
         {/* Sidebar - Brand */}
         <a className="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
           <div className="sidebar-brand-icon rotate-n-15">
-            <i className="fas fa-laugh-wink" />
+            <i className="fas fa-fw fa-camera-retro" />
           </div>
           <div className="sidebar-brand-text mx-3">recam</div>
         </a>
@@ -18,7 +18,7 @@ const SidebarComponent = () => {
         {/* Nav Item - Dashboard */}
         <li className="nav-item">
           <Link className="nav-link" to="/">
-            <i className="fas fa-fw fa-tachometer-alt" />
+            <i className="fas fa-fw fa-chart-bar" />
             <span>Dashboard</span></Link>
         </li>
         {/* Divider */}
@@ -30,14 +30,14 @@ const SidebarComponent = () => {
         {/* Nav Item - Pages Collapse Menu */}
         <li className="nav-item">
           <Link className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" to="/list">
-            <i className="fas fa-fw fa-cog" />
+            <i className="fas fa-fw fa-camera" />
             <span>Camera</span>
           </Link>
         </li>
         {/* Nav Item - Utilities Collapse Menu */}
         <li className="nav-item">
         <Link className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" to="/listrental">
-            <i className="fas fa-fw fa-wrench" />
+            <i className="fas fa-fw fa-briefcase" />
             <span>Rental</span>
           </Link>
         </li>

@@ -15,10 +15,10 @@ const ListTransaksi = () => {
 
   useEffect(() => {
     listRent()
-      .then((response) => {
+     .then((response) => {
         setTrans(response.data.data);
       })
-      .catch((error) => {
+     .catch((error) => {
         console.error(error);
       });
   }, []);
@@ -32,7 +32,7 @@ const ListTransaksi = () => {
     }).then((willReturn) => {
       if (willReturn) {
         listRentDetailByRentId(id)
-          .then((response) => {
+         .then((response) => {
             const rentDetails = response.data.data;
   
             const camerasToUpdate = rentDetails.map((detail) => ({
@@ -40,9 +40,19 @@ const ListTransaksi = () => {
               cam_status: 1,
             }));
   
+            const rent = trans.find((transaction) => transaction.rntId === id);
+            const returnDate = new Date(rent.rentReturn);
+            const today = new Date();
+            let charge = 0;
+            if (returnDate < today) {
+              const diffInDays = Math.ceil((today - returnDate) / (1000 * 3600 * 24));
+              charge = diffInDays * 100000;
+            }
+  
             const rentsToUpdate = {
               rnt_id: id,
               rnt_status: 1,
+              rnt_charge: charge,
             };
   
             // Array of promises for updating cameras
@@ -61,11 +71,11 @@ const ListTransaksi = () => {
   
             // Waiting for all updates to finish
             Promise.all([...updateCameraPromises, updateRentPromise])
-              .then(() => {
+             .then(() => {
                 // Update trans status
                 const updatedTrans = trans.map((transaction) => {
                   if (transaction.rntId === id) {
-                    return { ...transaction, rnt_status: 1 };
+                    return {...transaction, rnt_status: 1, rnt_charge: charge };
                   }
                   return transaction;
                 });
@@ -81,13 +91,13 @@ const ListTransaksi = () => {
                   navigate('/listrental');
                 });
               })
-              .catch((error) => {
+             .catch((error) => {
                 // Handle errors
                 console.error("Error updating camera and rent status:", error);
                 Swal("Error", "Failed to update camera and rent status", "error");
               });
           })
-          .catch((error) => {
+         .catch((error) => {
             console.error("Error fetching rent details:", error);
             Swal("Error", "Failed to fetch rent details", "error");
           });
@@ -96,20 +106,6 @@ const ListTransaksi = () => {
       }
     });
   }
-  
-
-
-
-  const handleUpdateCameraStatus = (rnt_id, cam_id) => {
-    const newCameraStatus = { cam_status: 1 };
-    updateCamera(cam_id, newCameraStatus)
-      .then((response) => {
-        Swal.fire('Success', 'Camera status updated successfully', 'success');
-      })
-      .catch((error) => {
-        Swal.fire('Error', 'Error updating camera status', 'error');
-      });
-  };
 
 
 
