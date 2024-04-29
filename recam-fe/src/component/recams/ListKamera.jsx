@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef} from 'react';
 import { Link } from 'react-router-dom';
 import { deleteCamera, listCamera } from '../../service/KameraService';
 import Swal from 'sweetalert';
+import $ from 'jquery';
+import 'datatables.net-dt';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
 
 
 function ListKamera() {
   const [cameras, setCameras] = useState([]);
+  const tableRef = useRef(null);
 
   useEffect(() => {
     listCamera()
@@ -13,6 +17,9 @@ function ListKamera() {
         const dataCamera = response.data.data;
         setCameras(dataCamera.filter(cmr => cmr.cam_status !== 0));
         console.log("data", response.data.data);
+        $(document).ready(() => {
+          $(tableRef.current).DataTable();
+        });
       })
       .catch(error => {
         console.error(error);
@@ -64,7 +71,7 @@ function ListKamera() {
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table table-bordered" id="myTable" width="100%" cellSpacing={0} >
+          <table ref={tableRef} className="table table-bordered" id="myTable" width="100%" cellSpacing={0}>
               <thead>
                 <tr>
                   <th>Name</th>

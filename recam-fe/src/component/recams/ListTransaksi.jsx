@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
 import { listRent } from '../../service/RentService';
 import { addRentDetail } from '../../service/RentDetailService';
@@ -6,17 +6,23 @@ import { updateCamera } from '../../service/KameraService';
 import { updateRent } from '../../service/RentService';
 import Swal from 'sweetalert';
 import { listRentDetailByRentId } from '../../service/RentDetailService';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import $ from 'jquery';
+import 'datatables.net-dt';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.min.css';
 
 const ListTransaksi = () => {
   const [trans, setTrans] = useState([]);
-  const [rentIds, setRentIds] = useState([]);
+  const tableRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     listRent()
      .then((response) => {
         setTrans(response.data.data);
+        $(document).ready(() => {
+          $(tableRef.current).DataTable();
+        });
       })
      .catch((error) => {
         console.error(error);
@@ -122,7 +128,7 @@ const ListTransaksi = () => {
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table table-bordered" id="myTable" width="100%" cellSpacing={0} >
+            <table ref={tableRef} className="table table-bordered" id="myTable" width="100%" cellSpacing={0}>
               <thead>
                 <tr>
                   <th>Customer</th>
